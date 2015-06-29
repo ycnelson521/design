@@ -29,7 +29,7 @@ With ROS 2.0 relying on DDS which uses UDP as its transport, we can give control
 
 DDS provides fine-grained control over the Quality of Service (QoS) setting for each of the entities involved in the system.
 Common entities whose behavior can be modified via QoS settings include: Topic, DataReader, DataWriter, Publisher and Subscriber.
-QoS is enforced based on a Request vs Offerent Model, however Publications and Subscriptions will only match if the QoS settings are compatible.
+QoS is enforced based on a Request vs Offerer Model, however Publications and Subscriptions will only match if the QoS settings are compatible.
 
 ## ROS 2.0 proposal
 
