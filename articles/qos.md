@@ -53,3 +53,5 @@ In environments where DDS is already deployed and also to enable more extensibil
 * Angelo Corsaro, [The DDS Tutorial Part II](http://www.slideshare.net/Angelo.Corsaro/the-dds-tutorial-part-ii)
 
 * [DDS Spec, section 2.2.3](http://www.omg.org/spec/DDS/1.4/PDF/)
+
+* [QoS policies for configuring reliability](https://community.rti.com/content/forum-topic/qos-policies-configuring-reliability)
