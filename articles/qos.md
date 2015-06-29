@@ -54,4 +54,4 @@ In environments where DDS is already deployed and also to enable more extensibil
 
 * [DDS Spec, section 2.2.3](http://www.omg.org/spec/DDS/1.4/PDF/)
 
-* [QoS policies for configuring reliability](https://community.rti.com/content/forum-topic/qos-policies-configuring-reliability)
+* Heidi Schubert, [QoS policies for configuring reliability](https://community.rti.com/content/forum-topic/qos-policies-configuring-reliability)
