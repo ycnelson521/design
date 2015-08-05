@@ -1,11 +1,12 @@
 ---
 layout: default
-title: Why ROS 2.0?
+title: 為什麼要開發ROS 2.0?
 permalink: articles/why_ros2.html
 abstract:
   This article captures the reasons for making breaking changes to the ROS API, hence the 2.0.
 published: true
 author: Brian Gerkey
+翻譯者: 賴柏任
 ---
 
 * This will become a table of contents (this text will be scraped).
