@@ -3,7 +3,7 @@ layout: default
 title: 為什麼要開發ROS 2.0?
 permalink: articles/why_ros2.html
 abstract:
-  This article captures the reasons for making breaking changes to the ROS API, hence the 2.0.
+  這篇文章描述為什麼要對ROS的API做突破性修改，即ROS 2.0。
 published: true
 author: Brian Gerkey
 translator: 賴柏任
@@ -19,17 +19,16 @@ translator: 賴柏任
 </div>
 
 Original Author: {{ page.author }}
+
 Translator: {{ page.translator }}
 
 
-We started work on ROS in November 2007.
-A lot has happened since then and we believe that it is now time to build the next generation ROS platform.
-In this article we will explain why.
+我們從2007年的11月開始開發ROS。
+自那時起，有很多的更新跟ROS版本的升級，我們認為現在已經是時候著手開發下一版的ROS。接下來，我們會解釋原因。
 
+## 我們怎麼到達今天的狀態
 
-## How we got here
-
-ROS began life as the development environment for the Willow Garage PR2 robot.
+ROS的誕生，是為了要提供一個開發環境給Willow Garage製造的PR2機器人。
 Our primary goal was to provide the software tools that users would need to undertake novel research and development projects with the PR2.
 At the same time, we knew that the PR2 would not be the only, or even the most important robot in the world, and we wanted ROS to be useful on other robots.
 So we put a lot of effort into defining levels of abstraction (usually through message interfaces) that would allow much of the software to be reused elsewhere.
@@ -54,7 +53,7 @@ With all these new uses of ROS, the platform is being stretched in unexpected wa
 While it is holding up well, we believe that we can better meet the needs of a now-broader ROS community by tackling their new use cases head-on.
 
 
-## New use cases
+## 新的使用情境
 
 Of specific interest to us for the ongoing and future growth of the ROS community are the following use cases, which we did not have in mind at the beginning of the project:
 
