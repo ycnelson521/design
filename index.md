@@ -1,19 +1,17 @@
 ---
 layout: default
-title: ROS2 Design
-html_title: Design
+title: ROS2 設計中文化網頁
+html_title: ROS 2.0 中文化
 ---
 
-# ROS 2.0 Design (設計)
+# ROS 2.0 設計
 
-This site is repository of articles which are designed to inform and guide the ROS 2.0 design efforts.
-The goal of the ROS 2.0 project is to leverage what is great about ROS 1.x and improve what isn't.
+這個網站是ROS 2.0設計理念的中文化網頁，旨在讓大家了解ROS 2.0的設計理念，並提供開發者努力的方向。
+ROS 2.0的設計是要保存ROS 1.x版本的優良部份，並改進ROS1.x所沒有的功能。
 
-If you would like to contribute, checkout the [contribute]({{ site.baseurl }}/contribute.html) page to learn how.
+# 文章列表
 
-# Articles
-
-Here is a list of the articles (white papers) which have been written so far. These articles should serve as an excellent entry point for anyone wanting to join the conversation about any of the ROS 2.0 topics.
+以下是目前已經撰寫完畢的文章，這些文章對於想學習並參與ROS 2.0開發的使用者，是很好的切入點。
 
 {% assign sorted_pages = site.pages | sort:"name" %}
 {% for p in sorted_pages %}
