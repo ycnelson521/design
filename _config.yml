@@ -1,8 +1,8 @@
 name: ROS2 Design
 description: "Distilled design documents related to the ROS 2.0 effort"
 
-baseurl: http://design.ros2.org
-repo: https://github.com/ros2/design
+baseurl: http://po-jen.github.io/design/
+repo: https://github.com/Po-Jen/design/
 
 oauth_client_id: efa6dd8eae9106381720
 
