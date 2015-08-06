@@ -19,39 +19,33 @@ translator: 賴柏任
 </div>
 
 Original Author: {{ page.author }}
-
 Translator: {{ page.translator }}
 
 
 我們從2007年的11月開始開發ROS。
-自那時起，有很多的更新跟ROS版本的升級，我們認為現在已經是時候著手開發下一版的ROS。接下來，我們會解釋原因。
+自那時起，有很多的更新跟ROS版本的升級，我們認為現在已經是時候著手開發下一個世代的ROS。接下來，我們會解釋原因。
 
 ## 我們怎麼到達今天的狀態
 
-ROS的誕生，是為了要提供一個開發環境給Willow Garage製造的PR2機器人。
-Our primary goal was to provide the software tools that users would need to undertake novel research and development projects with the PR2.
-At the same time, we knew that the PR2 would not be the only, or even the most important robot in the world, and we wanted ROS to be useful on other robots.
-So we put a lot of effort into defining levels of abstraction (usually through message interfaces) that would allow much of the software to be reused elsewhere.
+ROS的誕生，是為了成為PR2機器人（由Willow Garage製造）的軟體開發環境。
+我們的主要目標是希望ROS成為用PR2做出創新研究和開發的使用者們，所需要的軟體開發工具。但我們也知道，PR2不會是唯一且最重要的機器人，所以我們希望ROS也能在其他機器人上良好的運作。因此我們花了許多精神在定義多階的抽象層，將機器人的硬體，韌體，ROS和應用程式層做出區隔（層與層之間透過我們定義好的通訊介面來溝通），這種架構使得程式碼很容易被重複使用，進而節省開發的時程。
 
-Still, we were guided by the PR2 use case, the salient characteristics of which included:
+不過，在開發的過程中，我們仍然依循PR2的使用需求來引導開發方向，這使得ROS具有以下幾個顯著的特色：
 
-- a single robot;
-- workstation-class computational resources on board;
-- no real-time requirements (or, any real-time requirements would be met in a special-purpose manner);
-- excellent network connectivity (either wired or close-proximity high-bandwidth wireless);
-- applications in research, mostly academia; and
-- maximum flexibility, with nothing prescribed or proscribed (e.g., "we don't wrap your main()").
+- 主要運行於單一機器人上;
+- 擁有工作站等級的運算資源;
+- 沒有real-time的運算需求（或者說，若有特殊的real-time的運算需求，可以用特殊解法來處理）;
+- 優良的網路連線能力（不論是有線網路或是近距離的高頻寬無線網路）;
+- 有許多學術界的研究成果和應用;
+- 最大的開發彈性(例如我們並不要求你的程式必須從main()開始執行).
 
-It is fair to say that ROS satisfied the PR2 use case, but also overshot by becoming useful on a surprisingly wide [variety of robots](http://wiki.ros.org/Robots).
-Today we see ROS used not only on the PR2 and robots that are similar the PR2, but also on wheeled robots of all sizes, legged humanoids, industrial arms, outdoor ground vehicles (including self-driving cars), aerial vehicles, surface vehicles, and more.
+我們可以說，今日的ROS滿足了PR2的使用需求，但令我們意想不到的是，ROS也被運用在[相當多種類的機器人](http://wiki.ros.org/Robots)上。
+除了PR2跟與PR2相仿的機器人之外，各種尺寸的輪型機器人、雙足人形機器人、工業機器人、戶外自動車（包含無人駕駛自動車）、飛行器、水面航行艇等等廣義的機器人都在使用ROS。
 
-In addition, we are seeing ROS adoption in domains beyond the mostly academic research community that was our initial focus.
-ROS-based products are coming to market, including manufacturing robots, agricultural robots, commercial cleaning robots, and others.
-Government agencies are also looking more closely at ROS for use in their fielded systems; e.g., NASA is expected to be running ROS on the Robonaut 2 that is deployed to the International Space Station.
+此外，我們觀察到ROS已經不僅被我們一開始鎖定的學術界所採用。截至今日，搭載ROS的產品已經面世，包含自動化製造機器人、農業生產機器人、清潔機器人等等。政府相關單位也積極了解ROS可以怎麼被運用於先進技術的開發，例如NASA預計將ROS運行於將在國際太空站上工作的Robonaut 2機器人。
 
-With all these new uses of ROS, the platform is being stretched in unexpected ways.
-While it is holding up well, we believe that we can better meet the needs of a now-broader ROS community by tackling their new use cases head-on.
-
+隨著這些新用途的誕生，ROS的可能性被拉伸的程度是我們原先完全無法預期的。
+雖然ROS 1.0運行良好並被廣泛延伸，我們相信，我們可以開始面對新的使用需求來更好地滿足日益寬廣的ROS社群。
 
 ## 新的使用情境
 
@@ -65,7 +59,7 @@ Of specific interest to us for the ongoing and future growth of the ROS communit
 - Prescribed patterns for building and structuring systems: while we will maintain the underlying flexibility that is the hallmark of ROS, we want to provide clear patterns and supporting tools for features such as life cycle management and static configurations for deployment.
 
 
-## New technologies
+## 新技術的引進
 
 At the core of ROS is an anonymous publish-subscribe middleware system that is built almost entirely from scratch.
 Starting in 2007, we built our own systems for discovery, message definition, serialization, and transport.
@@ -87,7 +81,7 @@ We can benefit tremendously from this approach in many ways, including:
 - we can point to existing production systems that already rely on those libraries when people ask us where ROS is "ready for prime time".
 
 
-## API changes
+## API的改進
 
 A further reason to build ROS 2.0 is to take advantage of the opportunity to improve our user-facing APIs.
 A great deal of the ROS code that exists today is compatible with the client libraries as far back as the 0.4 "Mango Tango" release from February 2009.
@@ -100,7 +94,7 @@ But fear not: there will be mechanisms in place to allow ROS 2.0 code to coexist
 At the very least, there will be translation relays that will support run-time interactions between the two systems.
 And it is possible that there will be library shims that will allow existing ROS code to compile/run against ROS 2.0 libraries, with behavior that is qualitatively similar to what is seen today.
 
-## Why not just enhance ROS 1?
+## 為什麼不改進 ROS 1 就好?
 
 In principle, the changes described above could be integrated into the existing core ROS code.
 E.g., new transport technologies could be added to `roscpp` and `rospy`.
