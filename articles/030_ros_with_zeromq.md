@@ -35,9 +35,9 @@ Translator: {{ page.translator }}
 
 ### 讓各個子系統發現彼此
 
-在考慮discovery這個問題時，我們最先想到的解決方案是[Zeroconf](http://blog.csdn.net/ccskyer/article/details/7616673)搭配Avahi跟Bonjour。
-Some simple experiments were conducted which used [pybonjour](https://code.google.com/p/pybonjour/) to try out using the zeroconf system for discovery.
-The core technology here is `mDNSresponder`, which is provided by Apple as free software, and is used by both Bonjour (OS X and Windows) and Avahi (Linux, specifically avahi-compat).
+在考慮discovery這個問題時，我們最先想到的解決方案是[Zeroconf](http://blog.csdn.net/ccskyer/article/details/7616673)這個協議，搭配Avahi跟Bonjour這兩套實作zeroconf協議的函式庫。
+我們使用[pybonjour](https://code.google.com/p/pybonjour/)做了一些簡單的實驗，來測試以zeroconf協議為基礎的系統中discovery的效果。
+其中的核心技術是`mDNSresponder`，它是蘋果公司提供的自由軟體，同時被Bonjour(OS X跟Windows)以及Avahi(Linux)所使用。
 
 These Zeroconf implementations, however, proved to not be so reliable with respect to keeping a consistent graph between machines.
 Adding and removing more than about twenty items at a time from subprocesses typically resulted in inconsistent state on at least one of the computers on the network.
