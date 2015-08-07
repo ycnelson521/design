@@ -81,21 +81,12 @@ ROS的核心是具有匿名性發佈與訂閱機制的中介軟體(middleware)�
 
 ## API的改進
 
-A further reason to build ROS 2.0 is to take advantage of the opportunity to improve our user-facing APIs.
-A great deal of the ROS code that exists today is compatible with the client libraries as far back as the 0.4 "Mango Tango" release from February 2009.
-That's great from the point of view of stability, but it also implies that we're still living with API decisions that were made several years ago, some of which we know now to be not the best.
+打造ROS 2.0的另一個理由是，我們可以藉此機會改進使用者API。目前絕大多數的ROS程式碼都跟2009年2月發布的ROS 0.4 - “Mango Tango”版本中所定下的client library相容。從穩定性的角度來看，這是一件好事。但這同時也表示，我們依舊在使用數年前規劃出的API，雖然現在的我們已知其中有部份並不是最佳的設計。
 
-So, with ROS 2.0, we will design new APIs, incorporating to the best of our ability the collective experience of the community with the first-generation APIs.
-As a result, while the key concepts (distributed processing, anonymous publish/subscribe messaging, RPC with feedback [i.e., actions], language neutrality, system introspectability, etc.) will remain the same, you should not expect ROS 2.0 to be API-compatible with existing ROS code.
+所以我們希望在ROS 2.0推出新的API設計，既保留第一代ROS API的優良部份，又更進一步整合社群使用ROS 1.0的經驗。換句話說，雖然關鍵的功能會被保留（例如分散式系統架構、匿名性的訂閱與發布機制、具有回饋機制的遠端程序調用協議(RPC，對應到ROS的actionlib),對不同程式語言的相容性, 還有系統管理工具等等），但你不應該預期ROS 2.0的API跟ROS 1.0的API會彼此相容。
 
-But fear not: there will be mechanisms in place to allow ROS 2.0 code to coexist with existing ROS code.
-At the very least, there will be translation relays that will support run-time interactions between the two systems.
-And it is possible that there will be library shims that will allow existing ROS code to compile/run against ROS 2.0 libraries, with behavior that is qualitatively similar to what is seen today.
+不過別擔心，我們會建立讓ROS 1.0和ROS 2.0的程式碼共存的機制。至少在系統執行階段，ROS 1.0跟ROS 2.0的程序是可以互相溝通的。而且未來有可能會有函式庫支援ROS 1.0調用ROS 2.0程式碼的機制。
 
 ## 為什麼不改進 ROS 1 就好?
 
-In principle, the changes described above could be integrated into the existing core ROS code.
-E.g., new transport technologies could be added to `roscpp` and `rospy`.
-We considered this option and concluded that, given the intrusive nature of the changes that would be required to achieve the benefits that we are seeking, there is too much risk associated with changing the current ROS system that is relied upon by so many people.
-We want ROS 1 as it exists today to keep working and be unaffected by the development of ROS 2.
-So ROS 2 will be built as a parallel set of packages that can be installed alongside and interoperate with ROS 1 (e.g., through message bridges).
+原則上，前面所提到的所有功能都能被整合到目前的ROS核心之中，例如最新的通訊技術可以被併入`roscpp`或是`rospy`。我們也曾經考慮過這個選項，但是修改如此多的功能可能造成ROS的不穩定，進而影響許多ROS使用者。這個風險是我們不希望出現的，我們希望ROS 1.0可以維持其穩定性，並持續地被使用，不受ROS 2.0開發的影響。所以ROS 2.0的定位會跟ROS 1.0平行，需要另外被安裝但仍能跟ROS 1.0溝通。
