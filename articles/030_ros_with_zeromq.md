@@ -1,13 +1,13 @@
 ---
 layout: default
-title: ROS on ZeroMQ and Friends
+title: 使用ZeroMQ跟相關的函式庫來開發ROS
 html_title: ZeroMQ and Friends
 permalink: articles/ros_with_zeromq.html
 abstract:
-  This article makes the case for using ZeroMQ and other libraries to implement a new, modern middleware for ROS.
-  This article also covers the results of the ZeroMQ based prototype made by OSRF.
+  這篇文章討論如何使用ZeroMQ跟其他的函式庫來開發跟得上軟體工程發展的ROS 2.0。此外，我們在OSRF(Open Source Robotic Foundation)使用ZeroMQ開發出的prototype也會在這篇文章中被討論。
 published: true
 author: '[William Woodall](https://github.com/wjwwood)'
+translator: 賴柏任
 ---
 
 * This will become a table of contents (this text will be scraped).
@@ -19,16 +19,16 @@ author: '[William Woodall](https://github.com/wjwwood)'
 {{ page.abstract }}
 </div>
 
-> **This document pre-dates the decision to build ROS 2 on top of DDS.**
->
-> This article could use additional details, feel free to propose changes.
+> **這篇文章是在決定使用DDS當作ROS 2.0的資料傳輸工具之前所撰寫的**
 
 Original Author: {{ page.author }}
+
+Translator: {{ page.translator }}
 
 While this article covers proposals and related experiments for building a new middleware specifically around ZeroMQ, it also generally captures the idea of building a new middleware out of a few component libraries.
 This strategy of composing existing libraries into a middleware is in contrast to wrapping up an existing end-to-end middleware which provides most if not all of the middleware needs for ROS out of the box.
 
-## Building a Prototype Middleware from Scratch
+## 從頭打造一個中介軟體的Prototype
 
 In order to meet the needs of ROS, a middleware needs to provide a few key services.
 First it needs to provide a way for parts of the system to discover each other and make connections dynamically at run time.
@@ -61,7 +61,7 @@ The details of this simple discovery system can be found at the above URL.
 
 This system, though simple, was quite effective and was sufficient to prove that implementing such a custom discovery system, even in multiple languages is a tractable problem.
 
-### Data Transport
+### 資料傳輸
 
 For transporting bytes between processes, a popular library is [ZeroMQ](http://zeromq.org/), but there are also libraries like [nanomsg](http://nanomsg.org/) and [RabbitMQ](http://www.rabbitmq.com/).
 In all of those cases the goal of the library is to allow you to establish connections, explicitly, to other participants and then send strings or bytes according to some communication pattern.
@@ -83,14 +83,14 @@ This is a good approach which keeps ZeroMQ lean and simple, but does mean more c
 
 Additionally, ZeroMQ, in particular, relies on reliable transports like TCP or [PGM (Pragmatic General Multicast)](http://en.wikipedia.org/wiki/Pragmatic_General_Multicast), so it makes it unsuitable for soft real-time scenarios.
 
-### Message Serialization
+### 訊息序列化
 
 In ROS 1.x, messages are defined in `.msg` files and code is generated at build time for each of the supported languages. ROS 1.x generated code can instantiate and then later serialize the data in a message as a mechanism for exchanging information.
 Since ROS was created, several popular libraries which take care of this responsibility have come about.
 Google's [Protocol Buffers (Protobuf)](https://code.google.com/p/protobuf/), [MessagePack](http://msgpack.org/), [BSON](http://bsonspec.org/), and [Cap'n Proto](http://kentonv.github.io/capnproto/) are all examples of serialization libraries which have come to popularity since ROS was originally written.
 An entire article could be devoted to the pros and cons of different message definition formats, serialization libraries, and their wire formats, but for the purposes of this prototype we worked with either plain strings or Protobuf.
 
-## Conclusions
+## 結論
 
 After implementing the custom middleware prototype, some points worth noting were made.
 First, there isn't any existing discovery systems which address the needs of the middleware which are not attached to other middlewares.
