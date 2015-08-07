@@ -4,7 +4,7 @@ title: 使用ZeroMQ跟相關的函式庫來開發ROS
 html_title: ZeroMQ and Friends
 permalink: articles/ros_with_zeromq.html
 abstract:
-  這篇文章討論如何使用ZeroMQ跟其他的函式庫來開發跟得上軟體工程發展的ROS 2.0。此外，我們在OSRF(Open Source Robotic Foundation)使用ZeroMQ開發出的prototype也會在這篇文章中被討論。
+  這篇文章討論如何使用[ZeroMQ](http://blog.ez2learn.com/2011/12/31/transport-lib-of-new-era-zeromq/)跟其他的函式庫來開發ROS 2.0。此外，我們在OSRF(Open Source Robotic Foundation)使用ZeroMQ開發出的prototype也會在這篇文章中被討論。
 published: true
 author: '[William Woodall](https://github.com/wjwwood)'
 translator: 賴柏任
@@ -25,22 +25,19 @@ Original Author: {{ page.author }}
 
 Translator: {{ page.translator }}
 
-While this article covers proposals and related experiments for building a new middleware specifically around ZeroMQ, it also generally captures the idea of building a new middleware out of a few component libraries.
-This strategy of composing existing libraries into a middleware is in contrast to wrapping up an existing end-to-end middleware which provides most if not all of the middleware needs for ROS out of the box.
+雖然這篇文章主要聚焦在使用ZeroMQ來建一個新的中介軟體（middleware），但其實也討論了如何利用數個函式庫來構建出一個新的中介軟體。值得注意的是，使用數個函式庫來打造來ROS的策略，跟使用已存在且提供許多功能的中介軟體來打造ROS的策略是大相逕庭的。
 
 ## 從頭打造一個中介軟體的Prototype
 
-In order to meet the needs of ROS, a middleware needs to provide a few key services.
-First it needs to provide a way for parts of the system to discover each other and make connections dynamically at run time.
-Then the middleware needs to provide one or more transport paradigms for moving information between parts of the system, and for ROS specifically the publish-subscribe pattern is required at a minimum. Additional communication patterns (such as request-response) can be implemented on top of publish-subscribe.
-Finally, the middleware should provide a means of defining messages and then preparing them for transport, i.e. serialization. However, if the middleware lacks a serialization mechanism, this can be provided by an external component.
-Since ROS 1.x was designed, there have been several new libraries in these component fields to gain popularity.
+為了滿足ROS的需求，我們新開發出的中介軟體需要提供幾個重要的服務。
 
-### Discovery
+首先，這個中介軟體需要讓建立在其之上的各個子系統可以發現彼此(discovery)，並且可以在執行期間動態地建立連結以利互相溝通。第二，建立連結之後，要有一個以上的傳輸機制讓子系統之間可以傳遞訊息，以ROS而言，至少要提供訂閱-發布的溝通機制。如此一來，額外的溝通機制（例如送出要求跟回應的service機制）都可以使用訂閱-發布的機制來實作。最後，這個中介軟體應該提供方法讓使用者定義訊息格式並提供傳輸機制（也就是將訊息序列化）。不過即使中介軟體本身不實作這個機制，也能透過使用其他函式庫來解決這個問題。
 
-For discovery the first solution that was investigated was [Zeroconf](http://en.wikipedia.org/wiki/Zero_configuration_networking) with Avahi/Bonjour.
-Some simple experiments were conducted which used [pybonjour](https://code.google.com/p/pybonjour/) to try out using the zeroconf system for discovery.
-The core technology here is `mDNSresponder`, which is provided by Apple as free software, and is used by both Bonjour (OS X and Windows) and Avahi (Linux, specifically avahi-compat).
+### 讓各個子系統發現彼此
+
+在考慮discovery這個問題時，我們最先想到的解決方案是[Zeroconf](http://blog.csdn.net/ccskyer/article/details/7616673)這個協議，搭配Avahi跟Bonjour這兩套實作zeroconf協議的函式庫。
+我們使用[pybonjour](https://code.google.com/p/pybonjour/)做了一些簡單的實驗，來測試以zeroconf協議為基礎的系統中discovery的效果。
+其中的核心技術是`mDNSresponder`，它是蘋果公司提供的自由軟體，同時被Bonjour(OS X跟Windows)以及Avahi(Linux)所使用。
 
 These Zeroconf implementations, however, proved to not be so reliable with respect to keeping a consistent graph between machines.
 Adding and removing more than about twenty items at a time from subprocesses typically resulted in inconsistent state on at least one of the computers on the network.
