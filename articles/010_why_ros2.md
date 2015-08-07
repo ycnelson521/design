@@ -19,6 +19,7 @@ translator: 賴柏任
 </div>
 
 Original Author: {{ page.author }}
+
 Translator: {{ page.translator }}
 
 
@@ -49,21 +50,19 @@ ROS的誕生，是為了成為PR2機器人（由Willow Garage製造）的軟體�
 
 ## 新的使用情境
 
-Of specific interest to us for the ongoing and future growth of the ROS community are the following use cases, which we did not have in mind at the beginning of the project:
+考慮到ROS社群的進一步成長跟發展性，我們對一些新的使用情境特別有興趣，這些使用情境是我們在剛開始開發ROS時尚未考慮到的，以下是我們有興趣的使用情境:
 
-- Teams of multiple robots: while it is possible to build multi-robot systems using ROS today, there is no standard approach, and they are all somewhat of a hack on top of the single-master structure of ROS.
-- Small embedded platforms:  we want small computers, including "bare-metal" micro controllers, to be first-class participants in the ROS environment, instead of being segregated from ROS by a device driver.
-- Real-time systems: we want to support real-time control directly in ROS, including inter-process and inter-machine communication (assuming appropriate operating system and/or hardware support).
-- Non-ideal networks: we want ROS to behave as well as is possible when network connectivity degrades due to loss and/or delay, from poor-quality WiFi to ground-to-space communication links.
-- Production environments: while it is vital that ROS continue to be the platform of choice in the research lab, we want to ensure that ROS-based lab prototypes can evolve into ROS-based products suitable for use in real-world applications.
-- Prescribed patterns for building and structuring systems: while we will maintain the underlying flexibility that is the hallmark of ROS, we want to provide clear patterns and supporting tools for features such as life cycle management and static configurations for deployment.
+- 多機器人協作: 雖然使用ROS 1.0可以開發多機器人系統，但標準作法並不存在。此外，目前的作法都是建構在ROS 1.0單一master架構上的特殊解法。
+- 嵌入式平台開發: 我們希望小型電腦，包含各式各樣的微處理機，都能直接而良好地運行ROS，而不是得透過裝置的驅動程式跟ROS溝通。
+- real-time系統: 我們希望ROS可以直接支援real-time控制，而且一次控制週期內的控制命令中可以包含跨process或是跨機器之間的溝通。(假設有良好的作業系統和硬體支援)
+- 不理想的網路狀況: 我們希望即使網路連線不佳(例如存在封包遺失或延遲的狀況)，ROS還能盡可能地擁有正常的表現。這些情況可能發生在不良的無線網路訊號或是地面至太空的網路連線。
+- 適用於產品開發:持續讓學術研究機構使用ROS來開發機器人prototype很重要，但除此之外，我們也希望這些prototype可以進一步演化為搭載ROS的產品，成為在現實生活中具有實際用途的應用。
+- 提供既定的系統建立與架構模式:ROS的一個標誌性特色就在於由多個process構成的系統可以依使用者需求彈性地變動，在保持這個特色的同時，我們也希望提供清晰的系統架構模式。此外，我們也希望支援life cycle management和static configurations for deployment等功能。
 
 
 ## 新技術的引進
 
-At the core of ROS is an anonymous publish-subscribe middleware system that is built almost entirely from scratch.
-Starting in 2007, we built our own systems for discovery, message definition, serialization, and transport.
-The intervening seven years have seen the development, improvement, and/or widespread adoption of several new technologies that are relevant to ROS in all of those areas, such as:
+ROS的核心是具有匿名性發佈與訂閱機制的中介軟體(middleware)，這個middleware是我們從無到有開發出來的。自2007年開始，我們自行撰寫了程序管理、自定義訊息、序列化跟資料傳輸的工具。在這七年之間，有許多新出現的技術可以處理上述的這些功能，包含:
 
 - Zeroconf;
 - Protocol Buffers;
@@ -72,13 +71,12 @@ The intervening seven years have seen the development, improvement, and/or wides
 - WebSockets; and
 - DDS (Data Distribution Service).
 
-It is now possible to build a ROS-like middleware system using off-the-shelf open source libraries.
-We can benefit tremendously from this approach in many ways, including:
+隨著這些新技術的出現，採用現成的開源函式庫來開發ROS這類型的中介軟體式相當可行的，而且這種做法具備相當多的好處，例如:
 
-- we maintain less code, especially non-robotics-specific code;
-- we can take advantage of features in those libraries that are beyond the scope of what we would build ourselves;
-- we can benefit from ongoing improvements that are made by others to those libraries; and
-- we can point to existing production systems that already rely on those libraries when people ask us where ROS is "ready for prime time".
+- 需要維護的程式碼量會減少，可以專注在非特定機器人(或者說較能被廣泛使用的)的程式碼;
+- 我們可以運用這些開源函式庫的特色，而不需要自行開發這些功能;
+- 我們可以得利於他人對這些函式庫的改進，讓ROS自然地變得更好;
+- 當其他人問我們ROS何時準備就緒時，我們可以參考使用相同開源函式庫的系統並提供洞見.
 
 
 ## API的改進
