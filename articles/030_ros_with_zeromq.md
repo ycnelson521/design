@@ -25,7 +25,7 @@ Original Author: {{ page.author }}
 
 Translator: {{ page.translator }}
 
-雖然這篇文章主要聚焦在使用ZeroMQ來建一個新的中介軟體（middleware），但其實也討論了如何利用數個函式庫來構建出一個新的中介軟體。值得注意的是，使用數個函式庫來打造來ROS的策略，跟使用已存在且提供許多功能的中介軟體來打造ROS的策略是大相逕庭的。
+雖然這篇文章主要聚焦在使用ZeroMQ來建一個新的中介軟體（middleware），但其實也討論了如何利用數個函式庫來構建出一個新的中介軟體。值得注意的是，使用數個函式庫來打造來ROS的策略，跟使用已存在且提供許多功能的中介軟體（例如DDS）來打造ROS的策略是大相逕庭的。
 
 ## 從頭打造一個中介軟體的Prototype
 
@@ -47,8 +47,7 @@ Translator: {{ page.translator }}
 
 [https://bitbucket.org/osrf/disc_zmq/src](https://bitbucket.org/osrf/disc_zmq/src)
 
-The custom discovery system used multicast UDP packets to post notifications like "Node started", "Advertise a publisher", and "Advertise a subscription", along with any meta data required to act, like for publishers, an address to connect to using ZeroMQ.
-The details of this simple discovery system can be found at the above URL.
+這個自製的discovery系統使用了群播的UDP封包來傳送通知，例如"Node啟動"、"產生一個發布者"、"新增一個訂閱"等等，其中也包含一些運作時需要用到的後設資料（meta data），例如發布者會需要跟ZeroMQ取得資料該傳輸到哪個地址。其他跟這個自製discovery系統相關的細節可以從上面的網址中找到。
 
 這個系統雖然簡單，但卻很有效率，而且可以證明即使用多種語言實作這樣的自製discovery系統，還是一個可以處理的問題。
 
