@@ -1,6 +1,6 @@
 ---
 layout: default
-title: ROS2 設計中文化網頁
+title: ROS 2.0 設計中文化網頁
 html_title: ROS 2.0 中文化
 ---
 
@@ -8,6 +8,8 @@ html_title: ROS 2.0 中文化
 
 這個網站是ROS 2.0設計理念的中文化網頁，旨在讓大家了解ROS 2.0的設計理念，並提供開發者努力的方向。
 ROS 2.0的設計是要保存ROS 1.x版本的優良部份，並改進ROS1.x所沒有的功能。
+
+如果你想看英文版的介紹，原本的網站在這：http://design.ros2.org/。
 
 # 文章列表
 
