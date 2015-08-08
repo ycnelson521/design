@@ -53,32 +53,27 @@ Translator: {{ page.translator }}
 
 ### 資料傳輸
 
-For transporting bytes between processes, a popular library is [ZeroMQ](http://zeromq.org/), but there are also libraries like [nanomsg](http://nanomsg.org/) and [RabbitMQ](http://www.rabbitmq.com/).
-In all of those cases the goal of the library is to allow you to establish connections, explicitly, to other participants and then send strings or bytes according to some communication pattern.
-ZeroMQ is an LGPL licensed library which has recently become very popular, is written in C++ with a C API, and has bindings to many languages.
-nanomsg is a new MIT licensed library which was created by one of the original authors of ZeroMQ, is written in C with a C API, but is far less mature than ZeroMQ.
-RabbitMQ is a broker that implements several messaging protocols, mainly AMQP, but also provides gateways for ZeroMQ, STOMP and MQTT. By being a broker, it meets some of the discovery needs as well as the transport needs for ROS. Although ZeroMQ is usually used in brokerless deployments, it can also be used in conjunction with RabbitMQ to provide persitence and durability of messages.
-RabbitMQ is licensed under the Mozilla Public License.
-All of these libraries could probably be used to replace the ROSTCP transport, but for the purposes of this article we will use ZeroMQ in a brokerless deployment.
+要在不同程序間傳遞資料，有一個很常被使用的函式庫就是[ZeroMQ](http://zeromq.org/)，當然我們還有一些其他的選項例如[nanomsg](http://nanomsg.org/)跟[RabbitMQ](http://www.rabbitmq.com/)。不管是哪一個函式庫，它們的主要功能都是讓使用者可以明確地建立連結，利用某些通訊的樣式來傳遞一系列的字串或位元組。
 
-In this prototype:
+近年來，ZeroMQ變得相當熱門，它是一個採取LGPL授權條款規範的函式庫，主要是用C++撰寫，提供C的API，而且有提供許多程式語言的binding。
+nanomsg是一個受MIT授權條款規範的函式庫，它的作者也是ZeroMQ的原作者群其中之一，實作跟API都是使用C，但它的成熟度遠比ZeroMQ來得低。
+RabbitMQ是一個受Mozilla Public License授權條款規範的函式庫，它主要的角色是一個中間人(Broker)，其中實作了幾種資料傳輸的協議，主要是[AMQP](http://lab.howie.tw/2012/07/whats-different-between-amqp-and-jms.html)，不過它也提供了跟ZeroMQ、STOMP和MQTT溝通的閘道器（gateway）。作為一個Broker，它也滿足了一些discovery跟資料傳輸的需求。雖然ZeroMQ常常被用在brokerless的環境中，但它也常跟RabbitMQ搭配使用，讓訊息的傳遞更加穩定。
+上述的這些函式庫都可能可以取代ROSTCP的傳輸機制，但因為這篇文章主要聚焦在ZeroMQ上，所以我們討論使用ZeroMQ的情況，且我們不使用broker（http://zeromq.org/whitepapers:brokerless）。
+
+在我們製作的這個prototype中：
 
 [https://bitbucket.org/osrf/disc_zmq/src](https://bitbucket.org/osrf/disc_zmq/src)
 
-ZeroMQ was used as the transport, which conveniently has bindings in C, C++, and Python.
-After making discoveries using the above described simple discovery system, connections were made using ZeroMQ's `ZMQ_PUB` and `ZMQ_SUB` socket's.
-This worked quite well, allowing for communication between process in an efficient and simple way.
-However, in order to get more advanced features, like for instance latching, ZeroMQ takes the convention approach, meaning that it must be implemented by users with a well known pattern.
-This is a good approach which keeps ZeroMQ lean and simple, but does mean more code which must be implemented and maintained for the prototype.
+ZeroMQ被用來處理資料傳輸（它提供了C、C++跟Python的binding，相當方便）。在使用前一個小section提到的函式庫建立的簡易discovery系統來找到系統中其他節點之後，ZeroMQ被用來建立連結（使用`ZMQ_PUB`跟`ZMQ_SUB`的socket）。在我們的實驗中，這個prototype運作順暢，使得程序之間可以使用簡單又有效率的方式互相溝通。不過，如果要讓系統具備更進階的功能，例如instance latching，那我們就需要再自己額外進行實作。總結來說，使用ZeroMQ來實作雖然可以維持基本功能的精簡性，但也意味著我們需要實作且維護更多的程式碼來
+提供進階的功能。
 
-Additionally, ZeroMQ, in particular, relies on reliable transports like TCP or [PGM (Pragmatic General Multicast)](http://en.wikipedia.org/wiki/Pragmatic_General_Multicast), so it makes it unsuitable for soft real-time scenarios.
+除此之外，ZeroMQ特別依賴不會出錯的傳輸機制，例如TCP或[PGM (Pragmatic General Multicast)](http://en.wikipedia.org/wiki/Pragmatic_General_Multicast)，所以它並不適合用在soft real-time的情境之下。
 
 ### 訊息序列化
 
-In ROS 1.x, messages are defined in `.msg` files and code is generated at build time for each of the supported languages. ROS 1.x generated code can instantiate and then later serialize the data in a message as a mechanism for exchanging information.
-Since ROS was created, several popular libraries which take care of this responsibility have come about.
-Google's [Protocol Buffers (Protobuf)](https://code.google.com/p/protobuf/), [MessagePack](http://msgpack.org/), [BSON](http://bsonspec.org/), and [Cap'n Proto](http://kentonv.github.io/capnproto/) are all examples of serialization libraries which have come to popularity since ROS was originally written.
-An entire article could be devoted to the pros and cons of different message definition formats, serialization libraries, and their wire formats, but for the purposes of this prototype we worked with either plain strings or Protobuf.
+在ROS 1.x裡面，訊息被定義在`.msg`檔裡面，這個訊息格式對應到的程式碼會在編譯時被自動產生。ROS 1.x所產生的程式碼可以初始化訊息，並將其序列化以利資料的傳遞。自從ROS出現之後，有幾個處理訊息序列化的著名函式庫也開始出現，其中包含其中Google的[Protocol Buffers (Protobuf)](https://code.google.com/p/protobuf/), [MessagePack](http://msgpack.org/)、[BSON](http://bsonspec.org/)以及[Cap'n Proto](http://kentonv.github.io/capnproto/)。
+
+如果要討論不同訊息格式、序列化方式之間的優缺點，我們可以另外撰寫一整篇文章，但因為我們只是要測試prototype是否可行，所以僅僅使用一般的字串或是Protobuf就足夠了。
 
 ## 結論
 
