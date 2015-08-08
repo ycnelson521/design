@@ -41,16 +41,16 @@ Translator: {{ page.translator }}
 
 但是經過我們的實驗發現，這些實作zeroconf協議的函式庫並不能非常穩定地維持多機器之間的網路狀態圖。如果使用子程序一次加入或移除超過20台機器，在整個網路中至少會有一台以上的電腦無法跟其他電腦保持相同的網路狀態圖。舉例來說，假設A電腦已經發現了幾個nodes(一個node表示網路中的一個連線單位，在此例中是電腦)，B跟C電腦也發現這幾個nodes並已經把這些nodes顯示在自己的連線狀態圖中。當這些nodes所表示的電腦在幾秒之後被關掉電源，理論上，A~C這三台電腦上的網路狀態圖都應該同時把這些nodes移除掉，但問題就是，通常只有部份的nodes會被移除（被留下來的nodes就變成了zombie nodes），更麻煩的是，三台電腦移除的nodes還不一致。這個問題只有在多機器網路中使用Avahi才會出現，所以我們更進一步地深入了解Avahi的核心，來確認這個問題是否可以解決。然而，更進一步的了解讓我們更擔心Avahi的穩定性和品質，尤其是在[Multicast DNS](http://en.wikipedia.org/wiki/Multicast_DNS)和[DNS Service Discovery](http://en.wikipedia.org/wiki/Zero_configuration_networking#Service_discovery)這兩項技術的實作上。
 
-Further more DNS-SD seems to prefer the trade-off of light networking load for eventual consistency.
-This works reasonably well for something like service name look up, but it did not work well for quickly and reliably discovering the proto-ROS graph in the experiments.
-This lead to the development of a custom discovery system which is implemented in a few languages as part of the prototype here:
+除此之外，DNS-SD似乎傾向於讓網路的負載變小以維持穩定性。
+這個特性在查詢網路中有哪些服務可用時運作得相當良好，但是在我們實驗用的ROS graph測試中（畫出網路中所有ROS node的圖），它沒有辦法快速且穩定地發現所有存在於網路中的node。
+因為這個缺點，我們發展了自製的discovery系統，以下的連結中有我們用數種程式語言實作的prototype:
 
 [https://bitbucket.org/osrf/disc_zmq/src](https://bitbucket.org/osrf/disc_zmq/src)
 
 The custom discovery system used multicast UDP packets to post notifications like "Node started", "Advertise a publisher", and "Advertise a subscription", along with any meta data required to act, like for publishers, an address to connect to using ZeroMQ.
 The details of this simple discovery system can be found at the above URL.
 
-This system, though simple, was quite effective and was sufficient to prove that implementing such a custom discovery system, even in multiple languages is a tractable problem.
+這個系統雖然簡單，但卻很有效率，而且可以證明即使用多種語言實作這樣的自製discovery系統，還是一個可以處理的問題。
 
 ### 資料傳輸
 
