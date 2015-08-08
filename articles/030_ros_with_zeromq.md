@@ -64,13 +64,10 @@ RabbitMQ是一個受Mozilla Public License授權條款規範的函式庫，它�
 
 [https://bitbucket.org/osrf/disc_zmq/src](https://bitbucket.org/osrf/disc_zmq/src)
 
-ZeroMQ was used as the transport, which conveniently has bindings in C, C++, and Python.
-After making discoveries using the above described simple discovery system, connections were made using ZeroMQ's `ZMQ_PUB` and `ZMQ_SUB` socket's.
-This worked quite well, allowing for communication between process in an efficient and simple way.
-However, in order to get more advanced features, like for instance latching, ZeroMQ takes the convention approach, meaning that it must be implemented by users with a well known pattern.
-This is a good approach which keeps ZeroMQ lean and simple, but does mean more code which must be implemented and maintained for the prototype.
+ZeroMQ被用來處理資料傳輸（它提供了C、C++跟Python的binding，相當方便）。在使用前一個小section提到的函式庫建立的簡易discovery系統來找到系統中其他節點之後，ZeroMQ被用來建立連結（使用`ZMQ_PUB`跟`ZMQ_SUB`的socket）。在我們的實驗中，這個prototype運作順暢，使得程序之間可以使用簡單又有效率的方式互相溝通。不過，如果要讓系統具備更進階的功能，例如instance latching，那我們就需要再自己額外進行實作。總結來說，使用ZeroMQ來實作雖然可以維持基本功能的精簡性，但也意味著我們需要實作且維護更多的程式碼來
+提供進階的功能。
 
-Additionally, ZeroMQ, in particular, relies on reliable transports like TCP or [PGM (Pragmatic General Multicast)](http://en.wikipedia.org/wiki/Pragmatic_General_Multicast), so it makes it unsuitable for soft real-time scenarios.
+除此之外，ZeroMQ特別依賴不會出錯的傳輸機制，例如TCP或[PGM (Pragmatic General Multicast)](http://en.wikipedia.org/wiki/Pragmatic_General_Multicast)，所以它並不適合用在soft real-time的情境之下。
 
 ### 訊息序列化
 
