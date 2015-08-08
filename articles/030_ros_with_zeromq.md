@@ -39,13 +39,7 @@ Translator: {{ page.translator }}
 我們使用[pybonjour](https://code.google.com/p/pybonjour/)做了一些簡單的實驗，來測試以zeroconf協議為基礎的系統中discovery的效果。
 其中的核心技術是`mDNSresponder`，它是蘋果公司提供的自由軟體，同時被Bonjour(OS X跟Windows)以及Avahi(Linux)所使用。
 
-These Zeroconf implementations, however, proved to not be so reliable with respect to keeping a consistent graph between machines.
-Adding and removing more than about twenty items at a time from subprocesses typically resulted in inconsistent state on at least one of the computers on the network.
-One particularly bad case was the experiment of removing items from Zeroconf, where in several "nodes" were registered on machine A and then after a few seconds shutdown cleanly.
-The observed behavior on remote machines B and C was that the zeroconf browser would show all "nodes" as registered, but then after being shutdown only some would be removed from the list, resulting in "zombie nodes".
-Worse still is that the list of "zombie nodes" were different on B and C.
-This problem was only observed between machines using avahi as a compatibility layer, which lead into a closer look into avahi and its viability as a core dependency.
-This closer look at avahi raised some concerns about the quality of the implementation with respect to the [Multicast DNS](http://en.wikipedia.org/wiki/Multicast_DNS) and [DNS Service Discovery](http://en.wikipedia.org/wiki/Zero_configuration_networking#Service_discovery) technology.
+但是經過我們的實驗發現，這些實作zeroconf協議的函式庫並不能非常穩定地維持多機器之間的網路狀態圖。如果使用子程序一次加入或移除超過20台機器，在整個網路中至少會有一台以上的電腦無法跟其他電腦保持相同的網路狀態圖。舉例來說，假設A電腦已經發現了幾個nodes(一個node表示網路中的一個連線單位，在此例中是電腦)，B跟C電腦也發現這幾個nodes並已經把這些nodes顯示在自己的連線狀態圖中。當這些nodes所表示的電腦在幾秒之後被關掉電源，理論上，A~C這三台電腦上的網路狀態圖都應該同時把這些nodes移除掉，但問題就是，通常只有部份的nodes會被移除（被留下來的nodes就變成了zombie nodes），更麻煩的是，三台電腦移除的nodes還不一致。這個問題只有在多機器網路中使用Avahi才會出現，所以我們更進一步地深入了解Avahi的核心，來確認這個問題是否可以解決。然而，更進一步的了解讓我們更擔心Avahi的穩定性和品質，尤其是在[Multicast DNS](http://en.wikipedia.org/wiki/Multicast_DNS)和[DNS Service Discovery](http://en.wikipedia.org/wiki/Zero_configuration_networking#Service_discovery)這兩項技術的實作上。
 
 Further more DNS-SD seems to prefer the trade-off of light networking load for eventual consistency.
 This works reasonably well for something like service name look up, but it did not work well for quickly and reliably discovering the proto-ROS graph in the experiments.
