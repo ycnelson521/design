@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 使用ZeroMQ跟相關的函式庫來開發ROS
-html_title: ZeroMQ and Friends
+html_title: 使用ZeroMQ跟相關的函式庫來開發ROS
 permalink: articles/ros_with_zeromq.html
 abstract:
   這篇文章討論如何使用[ZeroMQ](http://blog.ez2learn.com/2011/12/31/transport-lib-of-new-era-zeromq/)跟其他的函式庫來開發ROS 2.0。此外，我們在OSRF(Open Source Robotic Foundation)使用ZeroMQ開發出的prototype也會在這篇文章中被討論。
@@ -77,21 +77,10 @@ ZeroMQ被用來處理資料傳輸（它提供了C、C++跟Python的binding，相
 
 ## 結論
 
-After implementing the custom middleware prototype, some points worth noting were made.
-First, there isn't any existing discovery systems which address the needs of the middleware which are not attached to other middlewares.
-Implementing a custom discovery system is a possible but time consuming.
+在實作了一個簡易的prototype之後，我們認為有幾個關鍵點值得提出來討論。首先，目前不存在一個discovery系統可以支援跨中介軟體之間的discovery，雖然自己實作可以滿足上述功能的discovery系統是可行的，但非常花時間。
 
-Second, there is a good deal of software that needs to exist in order to integrate discovery with transport and serialization.
-For example, the way in which connections are established, whether using point to point or multicast is a piece of code which lives between the transport and discovery systems.
-Another example is the efficient intra-process communications, ZeroMQ provides an INPROC socket, but the interface to that socket is bytes, so you cannot use that without serialization without constructing a system where you pass around pointers through INPROC rather than serialized data.
-At the point where you are passing around pointers rather than serialized data you have to start to duplicate behavior between the intraprocess and interprocess communications which are abstracted at the ROS API level.
-One more piece of software which is needed is the type-safety system which works between the transport and the messages serialization system.
-Needless to say, even with these component libraries solving a lot of the problems with implementing a middleware like ROS's, there still exists quite a few glue pieces which are need to finish the implementation.
+第二個值得注意的點是，如果想整合discovery、資料傳輸跟資料序列化的功能，我們還需要更多的函式庫被撰寫。舉例來說，若我們考慮連線建立的方式，不論是用點對點傳輸或是廣播，都需要額外的程式碼來處理(因為這件事並不在資料傳輸或是discovery系統這些函式庫的實作範圍內)。另外一個例子是跨程序間的溝通，ZeroMQ提供INPROC socket來處理這件事，但這種socket接收的資料格式是位元組，所以你必須先將資料進行序列化再將指向這些資料的指標傳給INPROC socket。當你使用傳指標的方式來實作，程序之間的傳輸和程序之內的傳輸的行為就會相當相似，但這兩者在ROS API的抽象層會被抽象化掉。另一個需要為其撰寫程式的功能就是在資料序列化系統和資料傳輸系統之間的型別檢查系統。在看了這麼多例子之後，我們清楚地知道，就算已經存在幾個重要的函式庫，在這些函式庫之間的銜接部分仍需要被實作，以完成像ROS這樣的中介軟體。
 
-Even though it would be a lot of work to implement a middleware using component libraries like ZeroMQ and Protobuf, the result would likely be a finely tuned and well understood piece of software.
-This path would most likely give the most control over the middleware to the ROS community.
+雖然使用ZeroMQ和Protobuf這些函式庫來實作ROS這樣的中介軟體需要花費許多資源，至少完成的結果很有可能可以被調校到相當穩定，而且各個子系統分工清楚。這種實作方式還可以將ROS的控制權交給ROS社群(因為構成子系統的函式庫是可以被抽換的)。
 
-In exchange for the creative control over the middleware, comes the responsibility to document its behavior and design to the point that it can be verified and reproduced.
-This is a non-trivial task which ROS 1.x did not do very well because it had a relatively good pair of reference implementations.
-Many users which wish to put ROS into mission critical situations and into commercial products have lamented that ROS lacks this sort of governing design document which allows them to certify and audit the system.
-It would be of paramount importance that this new middleware be well defined, which is not a trivial task and almost certainly rivals the engineering cost of the initial implementation.
+但是，可以隨自己所想來更動ROS這個中介軟體的代價就是，對於不同實作版本的說明文件會更重要，才能讓使用者可以依照說明文件上的指示驗證手上的ROS版本具備有其應該有的特性。這件事情一點都不簡單，至少在ROS 1.x的階段就做得不是很好，這正是因為ROS有幾種不同的實作版本。有許多使用者在嘗試把ROS應用到需要精密控制的任務上或是商業化的產品上時，都在抱怨ROS缺少了一份詳盡的、說明文件，讓他們無法驗證或是完整審視整個系統。在一開始就把這個中介軟體實作得相當完善也是一個選項，但這並不容易，而且對於新版本的實作來說，這絕對是相當耗費成本的一種作法。
