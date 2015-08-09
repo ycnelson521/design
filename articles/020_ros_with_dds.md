@@ -1,12 +1,12 @@
 ---
 layout: default
-title: ROS on DDS
+title: 使用DDS來開發ROS
 permalink: articles/ros_on_dds.html
 abstract:
-  This article makes the case for using DDS as the middleware for ROS, outlining the pros and cons of this approach, as well as considering the impact to the user experience and code API that using DDS would have.
-  The results of the "ros_dds" prototype are also summarized and used in the exploration of the issue.
+  這篇文章討論如何使用DDS來開發ROS 2.0，列出這種作法的優缺點，並討論使用者經驗和API帶來的影響。我們也會針對我們實作的prototype "ros_dds"給一些總結意見，並探討其中潛藏的問題。
 author: '[William Woodall](https://github.com/wjwwood)'
 published: true
+translator: 賴柏任
 ---
 
 * This will become a table of contents (this text will be scraped).
@@ -20,7 +20,9 @@ published: true
 
 Original Author: {{ page.author }}
 
-Terminology:
+Translator: {{ page.translator }}
+
+專業術語:
 
 - [Data Distribution Service (DDS)](http://en.wikipedia.org/wiki/Data_Distribution_Service)
 - The [Object Management Group (OMG)](http://www.omg.org/)
@@ -28,7 +30,7 @@ Terminology:
   | [Formal description](http://www.omg.org/cgi-bin/doc?formal/2014-03-01)
 
 
-## Why Consider DDS?
+## 為什麼考慮DDS?
 
 When exploring options for the next generation communication system of ROS, the initial options were to either improve the ROS 1.x transport or build a new middleware using component libraries such as [ZeroMQ](http://zeromq.org/), Protocol Buffers, and zeroconf (Bonjour/Avahi).
 However, in addition to those options, which both involved us building a middleware from parts or scratch, other end-to-end middlewares were considered.
