@@ -32,25 +32,15 @@ Translator: {{ page.translator }}
 
 ## 為什麼考慮DDS?
 
-When exploring options for the next generation communication system of ROS, the initial options were to either improve the ROS 1.x transport or build a new middleware using component libraries such as [ZeroMQ](http://zeromq.org/), Protocol Buffers, and zeroconf (Bonjour/Avahi).
-However, in addition to those options, which both involved us building a middleware from parts or scratch, other end-to-end middlewares were considered.
-During our research, one middleware that stood out was DDS.
+當我們在探索可以用於開發下一代ROS的通訊系統的選項時，最先考慮的是改進ROS 1.x的傳輸機制或是使用現有的函式庫來建構(例如使用ZeroMQ、Protocol Buffer和zeroconf)。但是，若採取上述這些選項，我們要不是得從頭打造整個中介軟體、不然就是要從各個部分開始組合，所以我們也考慮直接使用功能完整的其他中介軟體來打造ROS 2.0。經過我們的調查之後，其中一個脫穎而出的選項就是DDS。
 
+### 一個完整的中介軟體
 
-### An End-to-End Middleware
+使用一個像DDS這種完整的中介軟體來開發的好處是，我們需要維護的程式碼少了很多，而且這種中介軟體的行為和詳細規格都已經被詳細地撰寫成文件。除了系統層級的說明文件之外，DDS也有推薦的使用個案和軟體API。有了這些具體的說明文件和規格，第三方的開發者就可以檢驗、審視，甚至可以根據自己的需求來實作具備不同程度的互動性的版本。這項特色是ROS從未有過的(ROS只有少量的基礎說明文件和一些可供參考的實作版本)，而且，就算使用現有的一些函式庫來建構起ROS，對於規格和軟體行為的詳細說明文件還是不可或缺的。
 
-The benefit of using an end-to-end middleware, like DDS, is that there is much less code to maintain and the behavior and exact specifications of the middleware have already been distilled into documentation.
-In addition to system-level documentation, DDS also has recommended use cases and a software API.
-With this concrete specification, third parties can review, audit, and implement the middleware with varying degrees of interoperability.
-This is something that ROS has never had, besides a few basic descriptions in a wiki and a reference implementation.
-Additionally, this type of specification would need to be created anyway if a new middleware were to be built from existing libraries.
+當然，這種開發方式也有缺點，就是ROS 2.0也會被DDS的設計所限制。如果DDS的設計不夠用於解決我們想要的使用情境或是不夠彈性，我們就必須去更動DDS的設計。某種程度上來說，採用完整的中介軟體來開發也包含了要採用這個中介軟體的開發哲學和社群文化，這件事也不應被輕忽。
 
-The draw back of using an end-to-end middleware is that ROS must work within that existing design.
-If the design did not target a relevant use case or is not flexible, it might be necessary to work around the design.
-On some level, adopting an end-to-end middleware includes the philosophy and culture of that middleware, which should not be taken lightly.
-
-
-## What is DDS?
+## DDS是什麼?
 
 DDS provides a publish-subscribe transport which is very similar to ROS's publish-subscribe transport.
 DDS uses the "Interface Description Language (IDL)" as defined by the [Object Management Group (OMG)](http://www.omg.org/) for message definition and serialization.
