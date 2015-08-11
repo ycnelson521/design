@@ -42,52 +42,32 @@ Translator: {{ page.translator }}
 
 ## DDS是什麼?
 
-DDS provides a publish-subscribe transport which is very similar to ROS's publish-subscribe transport.
-DDS uses the "Interface Description Language (IDL)" as defined by the [Object Management Group (OMG)](http://www.omg.org/) for message definition and serialization.
-DDS does not yet provide a request-response style transport, which would be like ROS's service system, but a draft for that style of transport is being reviewed and hopefully adopted in 2015 (called [DDS-RPC](http://www.omg.org/spec/DDS-RPC/)).
+DDS提供跟ROS 1.x很相似的一種訂閱-發佈傳輸機制。它使用[Object Management Group (OMG)](http://www.omg.org/)定義的“Interface Description Language (IDL)”來實作訊息的定義和序列化。雖然DDS還沒有提供request-response的傳輸機制(這可以被當作ROS的service系統)，但這種傳輸方式的實作已經有初步規劃，第一個Beta版也已經在2015年春天發佈(稱作 [DDS-RPC](http://www.omg.org/spec/DDS-RPC/))。
 
-The default discovery system provided by DDS, which is required to use DDS's publish-subscribe transport, is a distributed discovery system.
-This allows any two DDS programs to communicate without the need for a tool like the ROS master.
-This makes the system more fault tolerant and flexible.
-It is not required to use the dynamic discovery mechanism, however, as multiple DDS vendors provide options for static discovery.
+DDS提供的預設discovery系統是一種分散式的discovery系統(這有別於ROS 1.x必須由master來掌管所有node的方式)，其中也使用DDS的發佈-訂閱傳輸機制。這使得任意兩個DDS程式可以不透過ROS master這種機制就能相互溝通。這使整個系統的容錯程度更高、也更彈性。而且，我們不一定要使用動態的discovery機制，有幾種DDS的實作版本都提供了靜態discovery機制的選項。
 
+### DDS是怎麼出現的?
 
-### Where did DDS come from?
+DDS起源自一群擁有提供相似中介軟體的公司，因為這些公司的客戶希望這些公司提供的中介軟體可以彼此溝通，所以這些中介軟體漸漸地被整合起來形成一套標準。DDS的標準是由Object Management Group建立起來的，跟建立UML、CORBA和SysML和其他軟體標準的是同一群人。這可能是好消息也可能是壞消息，看你怎麼想。一方面，你擁有一個標準制定委員會，他們會不斷討論而且在軟體工程社群擁有極大的影響力；但另一方面，他們前進地相對緩慢、對於改變的適應力也較差，所以也很可能無法跟上軟體工程界的最新潮流。
 
-DDS got its start as a group of companies which had similar middleware frameworks and became a standard when common customers wanted to get better interoperability between the vendors.
-The DDS standard was created by the Object Management Group, which are the same people that brought us UML, CORBA, SysML, and other generic software related standards.
-Now, depending on your perspective, this may be a positive endorsement or a negative endorsement.
-On the one hand you have a standards committee which is perennial and clearly has huge influence on the software engineering community, but on the other hand you have a slow moving body which is slow to adapt to changes and therefore arguably doesn't always keep up with the latest trends in software engineering.
+DDS一開始是幾個相似的中介軟體，後來因為彼此變得太相近，制定一個統一的標準來整合這些中介軟體才變得合理。在這樣的脈絡之下，雖然DDS規格的制定是由委員會撰寫出來的，但他的演進原本就相當貼近使用者的需求。由於在標準制定之前就已經是藉由跟使用者的互動來演進，這多少可以消弭大家對於DDS的擔心，擔心它只是一個憑空想像出來的標準、但不符合實際應用的需求。歷史上也曾有一些標準委員會所制訂出的標準，雖然立意良善且制訂得很完整，但沒人想要使用或是不符合使用者需求。不過DDS看起來沒有這種問題。
 
-DDS was originally several similar middlewares which eventually became so close to one another that writing a standard to unify them made sense.
-So in this way, even though the DDS specification has been written by a committee, it has evolved to its current form by reacting to the needs of its users.
-This type of organic evolution of the specification before it was ratified helps to alleviate the concern that the system was designed in a vacuum and that it does not perform well in real environments.
-There are some examples of committees coming up with well intentioned and well described specifications that nobody wants to use or doesn't meet the needs of the community it serves, but this does not appear to be the case for DDS.
+除了上述的擔憂，也有人擔心DDS將會是一個不更新的標準，這種刻板印象來自於UML和CORBA給人的不良回憶，因為這兩者也都是OMG所制定的標準。不過DDS看起來不會有這種問題，除了最近仍持續在更新之外，現在也還在新增更多的規格，包含websockets、SSL安全協議、可擴充的型別、request-response傳輸機制以及C++11風格的API(用來取代現在的C++介面)。對我們來說，DDS的標準仍持續地演進是一件很正面的事，雖然跟現今軟體工程的潮流比起來仍相對緩慢，但它依然在往滿足其使用者需求的方向在前進。
 
-There is also a concern that DDS is a static specification which was defined and is used in "legacy" systems, but has not kept current.
-This kind of stereotype comes from horror stories about things like UML and CORBA, which are also products of OMG.
-On the contrary, DDS seems to have an active and organic specification, which in the recent past has added, or is adding, more specifications for things like websockets, security over SSL, extensible types, request and response transport, and a new, more modern C++11 style API specification for the core API to replace the existing C++ interface.
-This type of evolution in the standard body for DDS is an encouraging thing to observe, and even though the body is relatively slow, as compared to software engineering technology trends, it is evolving to meet demands of its users.
+### DDS技術上的可信度
 
+有許多要求高精密度的系統都已經在使用DDS，它已經被用在:
 
-### Technical Credibility
+- 軍艦
+- 大型公共建設(例如水壩)
+- 金融系統
+- 航太系統
+- 飛行系統
+- 火車控制系統
 
-DDS has an extensive list of varied installations which are typically mission critical.
-DDS has been used in:
+除了這些使用情境之外，還有許多同等重要的不同系統都已經在使用DDS，這些成功的案例使得DDS設計的穩定度和彈性更加被信任。
 
-- battleships
-- large utility installations like dams
-- financial systems
-- space systems
-- flight systems
-- train switchboard systems
-
-And many other equally important and varied scenarios.
-These successful use cases lend credibility to DDS's design being both reliable and flexible.
-
-Not only has DDS met the needs of these use cases, but after talking with users of DDS (in this case government and NASA employees who are also users of ROS), they have all praised its reliability and flexibility.
-Those same users will note that the flexibility of DDS comes at the cost of complexity.
-The complexity of the API and configuration of DDS is something that ROS would need to address.
+DDS不僅滿足了這些使用情境下的需求，我們進一步訪問了政府及NASA的使用者(其中有些人也是ROS的使用者)，他們對於DDS的穩定性和彈性都讚譽有加。不過他們也提醒，DDS具備高彈性的代價就是高複雜度，它在API以及設定上的複雜度是我們應用DDS來開發ROS時需要注意的問題。
 
 The DDS wire specification (DDSI-RTPS) is extremely flexible, allowing it to be used for reliable, high level systems integration as well as real-time on embedded devices.
 Several of the DDS vendors have special implementations of DDS for embedded systems which boast specs related to library size and memory footprint on the scale of tens or hundreds of kilobytes.
