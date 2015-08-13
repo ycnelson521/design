@@ -69,29 +69,20 @@ DDS一開始是幾個相似的中介軟體，後來因為彼此變得太相近�
 
 DDS不僅滿足了這些使用情境下的需求，我們進一步訪問了政府及NASA的使用者(其中有些人也是ROS的使用者)，他們對於DDS的穩定性和彈性都讚譽有加。不過他們也提醒，DDS具備高彈性的代價就是高複雜度，它在API以及設定上的複雜度是我們應用DDS來開發ROS時需要注意的問題。
 
-The DDS wire specification (DDSI-RTPS) is extremely flexible, allowing it to be used for reliable, high level systems integration as well as real-time on embedded devices.
-Several of the DDS vendors have special implementations of DDS for embedded systems which boast specs related to library size and memory footprint on the scale of tens or hundreds of kilobytes.
-Since DDS is implemented, by default, on UDP, it does not depend on a reliable transport or hardware for communication.
-This means that DDS has to reinvent the reliability wheel (basically TCP plus or minus some features), but in exchange DDS gains portability and control over the behavior.
-Control over several parameters of reliability, what DDS calls Quality of Service (QoS), gives maximum flexibility in controlling the behavior of communication.
-For example, if you are concerned about latency, like for soft real-time, you can basically tune DDS to be just a UDP blaster.
-In another scenario you might need something that behaves like TCP, but needs to be more tolerant to long dropouts, and with DDS all of these things can be controlled by changing the QoS parameters.
+DDS的連接協議(DDSI-RTPS)具有極高的彈性，使得DDS可以被使用在需要高穩定性、高層次的的系統整合，也可以被real-time地執行在嵌入式裝置上。有幾個DDS函式庫的提供者都各自實作了用於嵌入式裝置的DDS，也都各自誇耀自己的實作在函式庫佔用的空間和記憶體使用量只需幾百KB。而由於DDS使用UDP傳輸協儀來實作，它不必依賴穩固的硬體或網路來傳輸。不過這也表示DDS需要自己重新建立確保資料傳輸不會遺漏的機制(基本上就是TCP機制，可能多幾個或少幾個功能而已)，好處是DDS較容易被移植到不同裝置上(因為較不穩定的硬體也能使用)、且對軟體行為的控制權增加。在DDS的實作中，可以藉由Quality of Service(QoS)來控制決定穩定性的參數，讓使用者有最高的彈性來控制傳輸時的行為。舉例來說，如果你希望程式執行滿足soft real-time的要求，那網路延遲(latency)就是一個需要考慮的問題，你可以將DDS設定成只使用UDP來傳輸。在另一種情形中，你可能希望DDS像TCP一樣可以可靠地傳送正確的資料，那就可以透過DDS的QoS參數來調整這些行為。
 
-Though the default implementation of DDS is over UDP, and only requires that level of functionality from the transport, OMG also added support for DDS over TCP in version 1.2 of their specification.
-Only looking briefly, two of the vendors (RTI and PrismTech) both support DDS over TCP.
+雖然DDS的實作預設是使用UDP傳輸協議，而且只要求這種等級的傳輸功能，OMG仍然在1.2版的DDS標準中新增了DDS使用TCP的部分。稍微survey一下，就會發現有兩個DDS實作版本的提供者(RTI跟PrismTech)都提供用TCP實作的DDS。
 
-From RTI's website ([http://community.rti.com/kb/xml-qos-example-using-rti-connext-dds-tcp-transport](http://community.rti.com/kb/xml-qos-example-using-rti-connext-dds-tcp-transport)):
+RTI的網站上有一段話([http://community.rti.com/kb/xml-qos-example-using-rti-connext-dds-tcp-transport](http://community.rti.com/kb/xml-qos-example-using-rti-connext-dds-tcp-transport)):
 
-> By default, RTI Connext DDS uses the UDPv4 and Shared Memory transport to communicate with other DDS applications.
-> In some circumstances, the TCP protocol might be needed for discovery and data exchange.
-> For more information on the RTI TCP Transport, please refer to the section in the RTI Core Libraries and Utilities User Manual titled "RTI TCP Transport".
+> RTI Connext DDS預設使用UDPv4和共享記憶體的方式來跟其他的DDS應用溝通。不過在某些情況下，discovery和資料傳輸時需要用到TCP的傳> 輸方式。如果你想知道更多關於RTI的TCP傳輸方式，可以去看RTI Core Libraries and Utilities User Manual裡面的 “RTI TCP Transport” 章節。
 
-From PrismTech's spec sheet, they support TCP as of DDSI-RTPS version 1.2:
+PrismTech的規格說明書上也寫了他們支援DDSI-RTPS1.2版裡的TCP部分:
 
 [http://www.prismtech.com/opensplice/products/opensplice-enterprise/opensplice-dds-core](http://www.prismtech.com/opensplice/products/opensplice-enterprise/opensplice-dds-core) (search for TCP)
 
 
-### Vendors and Licensing
+### 發佈者跟授權條款
 
 The OMG defined the DDS specification with several companies which are now the main DDS vendors.
 Popular DDS vendors include:
