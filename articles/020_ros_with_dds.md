@@ -75,7 +75,7 @@ DDS的連接協議(DDSI-RTPS)具有極高的彈性，使得DDS可以被使用在
 
 RTI的網站上有一段話([http://community.rti.com/kb/xml-qos-example-using-rti-connext-dds-tcp-transport](http://community.rti.com/kb/xml-qos-example-using-rti-connext-dds-tcp-transport)):
 
-> RTI Connext DDS預設使用UDPv4和共享記憶體的方式來跟其他的DDS應用溝通。不過在某些情況下，discovery和資料傳輸時需要用到TCP的傳> 輸方式。如果你想知道更多關於RTI的TCP傳輸方式，可以去看RTI Core Libraries and Utilities User Manual裡面的 “RTI TCP Transport” 章節。
+> RTI Connext DDS預設使用UDPv4和共享記憶體的方式來跟其他的DDS應用溝通。不過在某些情況下，discovery和資料傳輸時需要用到TCP的傳輸方式。如果你想知道更多關於RTI的TCP傳輸方式，可以去看RTI Core Libraries and Utilities User Manual裡面的 “RTI TCP Transport” 章節。
 
 PrismTech的規格說明書上也寫了他們支援DDSI-RTPS1.2版裡的TCP部分:
 
@@ -84,43 +84,32 @@ PrismTech的規格說明書上也寫了他們支援DDSI-RTPS1.2版裡的TCP部�
 
 ### 發佈者跟授權條款
 
-The OMG defined the DDS specification with several companies which are now the main DDS vendors.
-Popular DDS vendors include:
+OMG跟幾間公司一起制定了DDS的標準規格，這幾間公司也同時是DDS實作版本的發佈者，幾間比較知名的有:
 
 - RTI
 - PrismTech
 - Twin Oaks Software
 
-Amongst these vendors is an array of reference implementations with different strategies and licenses.
-The OMG maintains an active [list](http://dds-directory.omg.org/vendor/list.htm) of DDS vendors.
+這些公司提供的實作版本在實作策略和授權條款上都有些差異，OMG列出了一份DDS發佈者的[清單](http://dds-directory.omg.org/vendor/list.htm)。
 
-RTI's Connext DDS is available under a custom "Community Infrastructure" License, which is compatible with the ROS community's needs but requires further discussion with the community in order to determine its viability as the default DDS vendor for ROS.
-By, "compatible with the ROS community's needs," we mean that, though it is not an OSI-approved license, research has shown it to be adequately permissive to allow ROS to keep a BSD style license and for anyone in the ROS community to redistribute it in source or binary form.
-RTI also appears to be willing to negotiate on the license to meet the ROS community's needs, but it will take some iteration between the ROS community and RTI to make sure this would work.
-Like the other vendors this license is available for the core set of functionality, basically the basic DDS API, whereas other parts of their product like development and introspection tools are proprietary.
-RTI seems to have the largest on-line presence and installation base.
+RTI實作的Connext DDS是使用他們自訂的[Community Infrastructure License](https://www.rti.com/downloads/IC-license.html)來授權，這個授權條款符合ROS社群的需求，不過若要採用RTI的Connext DDS當作ROS主要使用的DDS實作版本，仍需要進一步的討論。我們這裡所說的"符合ROS社群的需求"的意思是，雖然Community Infrastructure License並不是[OSI](http://opensource.org/licenses)認可的授權條款，但是有研究指出這個授權條款還是可以允許ROS以[BSD](http://www.openfoundry.org/tw/legal-column-list/524--bsd)授權條款的形式被散佈，而且ROS的使用者可以任意地以原始碼或執行檔的形式散布自己重製的版本。RTI看起來也願意對授權條款進行溝通協調以滿足ROS社群的需求，不過這當然需要RTI和ROS社群間的來回討論來確保這件事情可行。跟其他發佈者相似的是，RTI的授權條款授權的部分只有函式庫的核心功能，也就是基本的DDS API，但其他像是開發工具或是introspection工具都是RTI私有的。此外，RTI看起來擁有最多的使用者。
 
-PrismTech's DDS implementation, OpenSplice, is licensed under the LGPL, which is the same license used by many popular open source libraries, like glibc, ZeroMQ, and Qt.
-It is available on [Github](https://github.com):
+PrismTech的DDS實作版本OpenSplice是用LGPL授權條款來發佈，跟其他著名的開源函式庫是相同的，例如glibc、ZeroMQ跟Qt。可以直接在Github上找到:
 
 [https://github.com/PrismTech/opensplice](https://github.com/PrismTech/opensplice)
 
-PrismTech's implementation comes with a basic, functioning build system and was fairly easy to package.
-OpenSplice appears to be the number two DDS implementation in use, but that is hard to tell for sure.
+PrismTech的實作版本還包含基本的[編譯功能](http://www.opensplice.org/dds-community/building)，而且相對容易被包成package。OpenSplice的使用者人數看起來是第二多的，不過很難判斷到底是不是真的如此。
 
-TwinOaks's CoreDX DDS implementation is proprietary only, but apparently they specialize in minimal implementations which are able to run on embedded devices and even bare metal.
+TwinOaks實作的CoreDX DDS完全是私有的，而且他們專住在最精簡的實作以利讓CoreDX DDS可以在嵌入式裝置，甚至一塊開發板上就能運行。
 
-Given the relatively strong LGPL option and the encouraging but custom license from RTI, it seems that depending on and even distributing DDS as a dependency should be straight forward.
-One of the goals of this proposal would be to make ROS 2.0 DDS vendor agnostic.
-So, just as an example, if the default implementation is RTI, but someone wants to use OpenSplice, they simply need to recompile the ROS source code with some options flipped and they could use the OpenSplice implementation.
+既然擁有LGPL授權的OpenSplice以及RTI自訂的授權條款(可以進一步溝通協調)這些選項，使用現成的DDS實作版本或把它當作相依的函式庫重新發佈看起來都是相當可行的。我們在設計ROS 2.0的其中一個目標就是讓DDS的實作版本可以被替換，舉例來說，假設預設的DDS實作版本是RTI的Connext DDS，如果有人想要使用OpenSplice，那只要更改一個選項、重新編譯ROS原始碼，就可以使用OpenSplice。
 
-![DDS and ROS API Layout](/img/ros_on_dds/api_levels.png "DDS and ROS API Layout")
+![DDS and ROS API Layout](po-jen.github.io/design/img/ros_on_dds/api_levels.png "DDS and ROS API Layout")
 
-This is made possible because of the fact that DDS defines an API in its specification.
-Research has shown that making code which is vendor agnostic is possible if not a little painful since the API's of the different vendors is almost identical, but there are minor differences like return types (pointer versus shared_ptr like thing) and header file organization.
+這件事之所以可行是因為DDS的標準規格中已經制定了它的API，所以不同實作版本的API是一致的。有人做過較深入的研究確定這件事是可行的，雖然不同實作版本之間還是有一些細微差距，例如回傳的形別不同(pointer或是shared_ptr這種差別)跟標頭檔的規劃方式。
 
 
-### Ethos and Community
+### 社群及其文化
 
 DDS comes out of a set of companies which are decades old, was laid out by the OMG which is an old-school software engineering organization, and is used largely by government and military users.
 So it comes as no surprise that the community for DDS looks very different from the ROS community and similar modern software projects like ZeroMQ.
