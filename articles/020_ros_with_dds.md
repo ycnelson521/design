@@ -104,7 +104,7 @@ TwinOaks實作的CoreDX DDS完全是私有的，而且他們專住在最精簡�
 
 既然擁有LGPL授權的OpenSplice以及RTI自訂的授權條款(可以進一步溝通協調)這些選項，使用現成的DDS實作版本或把它當作相依的函式庫重新發佈看起來都是相當可行的。我們在設計ROS 2.0的其中一個目標就是讓DDS的實作版本可以被替換，舉例來說，假設預設的DDS實作版本是RTI的Connext DDS，如果有人想要使用OpenSplice，那只要更改一個選項、重新編譯ROS原始碼，就可以使用OpenSplice。
 
-![DDS and ROS API Layout](po-jen.github.io/design/img/ros_on_dds/api_levels.png "DDS and ROS API Layout")
+![DDS and ROS API Layout](../img/ros_on_dds/api_levels.png "DDS and ROS API Layout")
 
 這件事之所以可行是因為DDS的標準規格中已經制定了它的API，所以不同實作版本的API是一致的。有人做過較深入的研究確定這件事是可行的，雖然不同實作版本之間還是有一些細微差距，例如回傳的形別不同(pointer或是shared_ptr這種差別)跟標頭檔的規劃方式。
 
