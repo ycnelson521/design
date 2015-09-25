@@ -111,30 +111,16 @@ TwinOaks實作的CoreDX DDS完全是私有的，而且他們專住在最精簡�
 
 ### 社群及其文化
 
-DDS comes out of a set of companies which are decades old, was laid out by the OMG which is an old-school software engineering organization, and is used largely by government and military users.
-So it comes as no surprise that the community for DDS looks very different from the ROS community and similar modern software projects like ZeroMQ.
-Though RTI has a respectable on-line presense, the questions asked by community members are almost always answered by an employee of RTI and though technically open source, neither RTI nor OpenSplice have spent time to provide packages for Ubuntu or Homebrew or any other modern package manager.
-They do not have extensive user contributed wiki's or an active Github repository.
+DDS從一群老公司的產品中產生出來，由OMG這個老派的軟體工程標準制定組織規劃，並大量被使用在政府跟軍事單位，所以DDS的使用者社群看起來跟ROS或是ZeroMQ這些較新的軟體社群相當不同，也就不令人感到意外。雖然RTI看起來有很多使用者，但社群裡的使用者所問的問題幾乎都是由RTI的員工回答的(而非其他使用者熱心參與回答)。而且雖然在技術上是開源的，但RTI的Connext或PrismTech的OpenSplice都沒有提供Ubuntu的apt或是Homebrew這些較流行的套件管理工具的package，也沒有由大量使用者撰寫的wiki或活躍的github repository。
 
-This staunch difference in ethos between the communities is one of the most concerning issues with depending on DDS.
-Unlike options like keeping rostcp or using ZeroMQ, there isn't the feeling that there is a large community to fall back on with DDS.
-However, the DDS vendors have been very responsive to our inquires during our research and it is hard to say if that will continue when it is the ROS community which brings the questions.
+DDS和ROS在社群文化上的巨大差異，對於採用DDS來開發ROS 2.0是最需要擔心的問題之一，跟繼續使用rostcp或使用ZeroMQ這兩種選項的重要差異在於，看起來並沒有很多使用者依賴DDS。但是DDS函式庫的發佈者在我們研究的過程中，一直很積極地回應我們的問題。不過如果是由廣大的ROS社群來問問題，這種積極回應的態度能否持續就很難說了。
 
-Even though this is something which should be taken under consideration when making a decision about using DDS, it should not disproportionately outweigh the technical pros and cons of the DDS proposal.
+雖然社群文化這個議題在決定是否採用DDS的過程中應該要被考慮，但也不能把這個議題的重要程度看得比DDS在技術層面的優缺點還要高。
 
 
-## ROS built on DDS
+## 建立在DDS之上的ROS
 
-The goal is to make DDS an implementation detail of ROS 2.0.
-This means that all DDS specific API's and message definitions would need to be hidden.
-DDS provides discovery, message definition, message serialization, and publish-subscribe transport.
-Therefore, DDS would provide discovery, publish-subscribe transport, and at least the underlying message serialization for ROS.
-ROS 2.0 would provide a ROS 1.x like interface on top of DDS which hides much of the complexity of DDS for the majority of ROS users, but then separately provides access to the underlying DDS implementation for users that have extreme use cases or need to integrate with other, existing DDS systems.
-Accessing the DDS implementation would require depending on an additional package which is not normally used.
-In this way you can tell if a package has tied itself to a particular DDS vendor by just looking at the package dependencies.
-The goal of the ROS API, which is on top of DDS, should be to meet all the common needs for the ROS community, because once a user taps into the underlying DDS system, they will lose portability between DDS vendors.
-Portability among DDS vendors is not intended to encourage people to frequently choose different vendors, but rather to enable power users to select the DDS implementation that meets their specific requirements, as well as to future-proof ROS against changes in the DDS vendor options.
-There will be one recommended and best-supported default DDS implementation for ROS.
+我們的目標是希望DDS變成ROS 2.0的實作細節，換句話說，DDS相關的API跟訊息格式的定義都需要被隱藏起來(如果你是ROS 2.0的使用者，完全不需要了解DDS的API)。DDS提供了Discovery、訊息格式的定義、訊息序列化和發佈-訂閱的傳輸機制，因此，我們至少會利用DDS的discovery、發佈-訂閱的傳輸機制和訊息序列化來開發ROS。ROS 2.0會提供跟ROS 1.x類似的介面，這個介面建立在DDS之上，所以對於大部分的ROS使用者來說，並不需要接觸到DDS複雜的部分。但同時，我們也會另外提供方法來更換底層的DDS函式庫，讓有特殊需求或需要使用其他DDS實作版本的使用者擁有高彈性的發揮空間。要更換底層的DDS函式庫，需要額外的package來處理dependency的問題，如此一來，使用者只需要看這個額外的package的dependency，就可以知道現在是用哪個DDS的實作版本。在設計建構於DDS函式庫之上的ROS API時，應該要將目標放在滿足ROS使用者社群的需求，因為當使用者開始觸碰到某個特定的DDS實作版本之後，就喪失了使用不同DDS實作版本的可移植性(如果某個package需要更動到底層的DDS函式庫，那要安裝到其他使用者的ROS環境中，就會引起麻煩)。我們之所以讓使用者可以在多種不同的DDS實作版本中切換，並不是為了鼓勵使用者常常更換實作版本，而是要讓使用者可以在有特殊需求的時候，利用不同實作版本的切換彈性來滿足自己的需求，同時也避免掉ROS 2.0在未來會抗拒除了預設的DDS實作版本之外的可能性。所以，ROS 2.0還是會有一個推薦使用、支援最完整的預設DDS實作版本。
 
 
 ### Discovery
