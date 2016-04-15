@@ -125,13 +125,9 @@ DDS和ROS在社群文化上的巨大差異，對於採用DDS來開發ROS 2.0是�
 
 ### Discovery
 
-DDS would completely replace the ROS master based discovery system.
-ROS would need to tap into the DDS API to get information like a list of all nodes, a list of all topics, and how they are connected.
-Accessing this information would be hidden behind a ROS defined API, preventing the users from having to call into DDS directly.
+DDS可以完全取代以往由master為基礎的discovery系統。取代之後，ROS 2.0可以透過DDS API來取得node的列表、topic的列表，以及他們之間的連接關係。換句話說，使用者不需直接呼叫DDS的API，而是可以呼叫把這些細節都隱藏起來的ROS 2.0 API。
 
-The advantage of the DDS discovery system is that, by default, it is completely distributed, so there is no central point of failure which is required for parts of the system to communicate with each other.
-DDS also allows for user defined meta data in their discovery system, which will enable ROS to piggyback higher level concepts onto publish-subscribe.
-
+使用DDS實作discovery系統的好處在於，他原生就是分散式的，所以不會有中心的master發生錯誤、使得系統中各部份難以溝通的現象發生。另外，DDS允許使用者定義更多的meta data，這讓ROS 2.0可以在發佈-訂閱之上建立更高階的概念。
 
 ### Publish-Subscribe Transport
 
