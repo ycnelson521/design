@@ -6,6 +6,8 @@ abstract:
   This article describes the rational for using an abstract middleware interface between ROS and a specific middleware implementation.
   It will outline the targeted use cases as well as their requirements and constraints.
   Based on that the developed middleware interface is explained.
+  這篇文章描述在ROS與某一特定中介軟體十座中使用抽象中介軟體介面的理由。這將會約略描述目標使用案例們以及它們的需求與限制。
+  我們將基於前述的項目說明目前開發的中介軟體。
 author: '[Dirk Thomas](https://github.com/dirk-thomas)'
 published: true
 ---
@@ -22,27 +24,31 @@ published: true
 Original Author: {{ page.author }}
 
 
-## The *middleware interface*
+## The *middleware interface* 中介軟體介面
 
-
-### Why does ROS 2 have a *middleware interface*?
+### Why does ROS 2 have a *middleware interface*? 為何 ROS 2 有一個中介軟體介面
 
 The ROS client library defines an API which exposed communication concepts like publish / subscribe to users.
+ROS客戶端資料庫(client library)定義一個應用程式介面(API)，此API將發佈/訂閱(publish/subscribe)通訊概念公開給使用者們。
 
 In ROS 1 the implementation of these communication concepts were build on custom protocols (e.g., [TCPROS](http://wiki.ros.org/ROS/TCPROS)).
+在ROS 1，這些通訊概念建立於客製的協定(如[TCPROS](http://wiki.ros.org/ROS/TCPROS))。
 
-For ROS 2 the decision has been made to build it on top of an existing middleware solution (namely [DDS](http://en.wikipedia.org/wiki/Data_Distribution_Service)).
-The major advantage of that approach is that ROS 2 can leverage an existing and well developed implementation of that standard.
+For ROS 2 the decision has been made to build it on top of an existing middleware solution (namely [DDS](http://en.wikipedia.org/wiki/Data_Distribution_Service)). The major advantage of that approach is that ROS 2 can leverage an existing and well developed implementation of that standard.
+在ROS 2，這些通訊概念將建立於現存的中介軟體解決方案(分散式資料服務，[DDS](http://en.wikipedia.org/wiki/Data_Distribution_Service))。最大的好處在於 ROS 2 可以利用已開發的DDS實作基礎。
 
 ROS could build on top of one specific implementation of DDS.
 But there are numerous different implementations available and each has its own pros and cons in terms of supported platforms, programming languages, performance characteristics, memory footprint, dependencies and licensing.
+ROS可建立於某一特定DDS的實作，但目前有很多DDS實作，每個實作在支援的平台、程式語言、效能特性、記憶體使用量、相依姓、與授權各有優劣。
 
 Therefore ROS aims to support multiple DDS implementations despite the fact that each of them differ slightly in their exact API.
 In order to abstract from the specifics an abstract interface is being introduces which can be implemented for different DDS implementations.
 This *middleware interface* defines the API between the ROS client library and any specific implementation.
+因此ROS以支援多種DDS實作為目標，即便每個實作在具體API設計都稍微不同。為了從這些具體API差異抽象化出來，一個可以用於不同DDS實作的抽像介面被提出。此中介軟體介面定義了ROS客戶端資料庫與任一特定DDS實作間的API。
 
 Each implementation of the interface will usually be a thin adapter which maps the generic *middleware interface* to the specific API of the middleware implementation.
 In the following the common separation of the adapter and the actual middleware implementation will be omitted.
+每個介面的實作通常會是一層薄薄的轉接器(adapter)，此轉接器將一般中介軟體介面對映至某個特定中介軟體實作的API。在下面，轉接器與實際中介軟體實作間的共通分界將被省略。
 
     +-----------------------------------------------+
     |                   user land                   |
@@ -57,13 +63,15 @@ In the following the common separation of the adapter and the actual middleware 
     +---------------+---------------+---------------+
 
 
-## Why should the *middleware interface* be agnostic to DDS?
+## Why should the *middleware interface* be agnostic to DDS? 為何中介軟體介面應該與DDS無關
 
 The ROS client library should not expose any DDS implementation specifics to the user.
 This is primarily to hide the intrinsic complexity of the DDS specification and API.
+ROS客戶端資料庫不應向用戶公開任何DDS實現細節。這主要是為了隱藏DDS規範和API的內在複雜度。
 
 While ROS 2 only aims to support DDS based middleware implementations it can strive to keep the *middleware interface* free of DDS specific concepts to enable implementations of the interface using a different middleware.
 It would also be feasible to implement the interface by tying together several unrelated libraries providing the necessary functions of discovery, serialization and publish / subscribe.
+雖然ROS 2目標僅在支援基於DDS的中介軟體實作，它可以努力保持中介軟體介面沒有特定DDS細節概念，以使其能夠使用不同的中介軟體來實作介面。透過將幾個提供發現、序列化、發布/訂閱必要功能的不相關的資料庫連結在一起來實作介面也是可行的。
 
     +-----------------------------------+
     |             user land             |   no middleware implementation specific code
@@ -76,17 +84,20 @@ It would also be feasible to implement the interface by tying together several u
     +-----------+-----------+-----------+
 
 
-## How does the information flow through the *middleware interface*?
+## How does the information flow through the *middleware interface*? 資訊如何在中介軟體介面中流通
 
 One goal of the *middleware interface* is to not expose any DDS specific code to the user land code.
 Therefore the ROS client library "above" the *middleware interface* needs to only operate on ROS data structures.
 ROS 2 will continue to use ROS message files to define the structure of these data objects and derive the data structures for each supported programming language from them.
+中介軟體介面的目標之一是不公開任何DDS細節原始碼給用戶土地(user land)原始碼。因此，ROS客戶端資料庫“以上”的中介軟體介面只需要操作ROS資料結構。 ROS 2將繼續使用ROS訊息檔案來定義這些資料物件的結構，並從中產生每種支援的程式語言資料結構。
 
 The middleware implementation "below" the *middleware interface* must convert the ROS data objects provided from the client library into its own custom data format before passing it to the DDS implementation.
 In reverse custom data objects coming from the DDS implementation must be converted into ROS data objects before being returned to the ROS client library.
+在中介軟體介面”以下”的中介軟體實作必須將從客戶端資料庫提供的ROS資料物件轉換為自己的自定義資料格式，然後再將其傳遞給DDS實作。在來自DDS實作的反向自定義資料物件必須在回傳到ROS客戶端資料庫之前轉換為ROS資料物件。
 
 The definition for the middleware specific data types can be derived from the information specified in the ROS message files.
 A defined mapping between the primitive data types of ROS message and middleware specific data types ensures that a bidirectional conversion is possible.
+中介軟體特定資料型態的定義可以從ROS訊息檔案中定義的訊息導出。ROS訊息原始資料類型和中介軟體特定資料型態之間預先定義的映射確保了雙向轉換是可能的。
 
     +----------------------+
     |      user land       |   1) create a ROS message
@@ -111,6 +122,7 @@ A defined mapping between the primitive data types of ROS message and middleware
     +----------------------+
 
 Depending on the middleware implementation the extra conversion can be avoided by implementing serialization functions directly from ROS messages as well as deserialization functions into ROS messages.
+根據中介軟體實作，可以通過直接從ROS訊息實作序列化函數以及將反序列化函數實作為ROS訊息來避免額外的轉換。
 
 
 ## Considered use cases
